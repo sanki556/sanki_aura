@@ -1,0 +1,15 @@
+{
+  "name": "discord-mobile-status",
+  "version": "1.0.0",
+  "description": "Discord Mobile Status & Custom Rich Presence Manager",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.17.1",
+    "dotenv": "^16.4.5"
+  }
+}

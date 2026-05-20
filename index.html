@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Mobile Status & Custom Rich Presence Manager</title>
+  <meta name="description" content="Custom Discord Rich Presence Client with Mobile Status Spoofing">
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Premium Animated Background Grid & Glows -->
+  <div class="bg-gradient-mesh"></div>
+  <div class="bg-glow orb-indigo"></div>
+  <div class="bg-glow orb-purple"></div>
+
+  <div class="app-container">
+    
+    <!-- ── LEFT SIDE: CUSTOMRP DESKTOP WINDOW ── -->
+    <div class="crp-window">
+      <!-- Titlebar -->
+      <div class="crp-titlebar">
+        <div class="crp-title-left">
+          <svg class="discord-app-icon" viewBox="0 0 127.14 96.36">
+            <path fill="currentColor" d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.88-.65,1.72-1.34,2.51-2a75.58,75.58,0,0,0,76,0c.8.69,1.63,1.39,2.51,2a68,68,0,0,1-10.5,5,78.37,78.37,0,0,0,6.63,10.85,105.43,105.43,0,0,0,32.61-18.83C129.87,48.12,123.6,25.32,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
+          </svg>
+          <span class="crp-title-text">CustomRP 1.19.2</span>
+        </div>
+        <div class="crp-window-controls">
+          <div class="win-btn win-minimize"><line x1="5" y1="12" x2="19" y2="12"></line></div>
+          <div class="win-btn win-maximize"><rect x="6" y="6" width="12" height="12"></rect></div>
+          <div class="win-btn win-close"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></div>
+        </div>
+      </div>
+
+      <!-- Menu bar -->
+      <div class="crp-menubar">
+        <span class="menu-item">File</span>
+        <span class="menu-item">Settings</span>
+        <span class="menu-item">Help</span>
+      </div>
+
+      <!-- Client Panel Body (Forms) -->
+      <div class="crp-body">
+        
+        <!-- Header inputs row -->
+        <div class="crp-row inline-row">
+          <div class="field flex-3">
+            <span class="crp-label">ID</span>
+            <input type="text" id="appId" class="crp-input mono text-glow" placeholder="Client ID" />
+          </div>
+          
+          <div class="field flex-2">
+            <span class="crp-label">Type</span>
+            <select id="actType" class="crp-select">
+              <option value="0">Playing</option>
+              <option value="1">Streaming</option>
+              <option value="2">Listening</option>
+              <option value="3">Watching</option>
+              <option value="5">Competing</option>
+            </select>
+          </div>
+
+          <div class="field flex-2">
+            <span class="crp-label">Spoof Platform</span>
+            <select id="platform" class="crp-select glow-select">
+              <option value="desktop">🖥️ Desktop (Windows)</option>
+              <option value="mobile_android" selected>📱 Mobile (Android)</option>
+              <option value="mobile_ios">📱 Mobile (iOS)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="crp-row">
+          <span class="crp-label">Name</span>
+          <input type="text" id="actName" class="crp-input" placeholder="Application name" />
+        </div>
+
+        <div class="crp-row inline-row">
+          <div class="field flex-1">
+            <span class="crp-label">Details</span>
+            <input type="text" id="actDetails" class="crp-input" placeholder="Details of presence" />
+          </div>
+          <div class="field flex-1">
+            <span class="crp-label">URL</span>
+            <input type="url" id="streamUrl" class="crp-input mono" placeholder="Stream URL (Only for Streaming type)" disabled />
+          </div>
+        </div>
+
+        <div class="crp-row inline-row">
+          <div class="field flex-1">
+            <span class="crp-label">State</span>
+            <input type="text" id="actState" class="crp-input" placeholder="State of presence" />
+          </div>
+          <div class="field flex-1">
+            <span class="crp-label">URL</span>
+            <input type="url" id="stateUrl" class="crp-input mono" placeholder="State link (Aesthetic)" />
+          </div>
+        </div>
+
+        <div class="crp-row inline-row align-items-center">
+          <div class="field" style="width: 100px;">
+            <span class="crp-label">Party</span>
+            <input type="number" id="partySize" class="crp-input numeric" placeholder="0" min="0" />
+          </div>
+          <div class="party-of-label">of</div>
+          <div class="field" style="width: 100px;">
+            <span class="crp-label">&nbsp;</span>
+            <input type="number" id="partyMax" class="crp-input numeric" placeholder="0" min="0" />
+          </div>
+        </div>
+
+        <!-- Timestamp Section -->
+        <fieldset class="crp-fieldset">
+          <legend class="crp-legend">Timestamp</legend>
+          
+          <div class="timestamp-options">
+            <label class="ts-option">
+              <input type="radio" name="tsMode" value="none">
+              <span>Since last connection</span>
+            </label>
+            <label class="ts-option">
+              <input type="radio" name="tsMode" value="update">
+              <span>Since last presence update</span>
+            </label>
+            <label class="ts-option">
+              <input type="radio" name="tsMode" value="started">
+              <span>Since CustomRP started</span>
+            </label>
+            <label class="ts-option">
+              <input type="radio" name="tsMode" value="local_time" checked>
+              <span>Your local time</span>
+            </label>
+            <label class="ts-option">
+              <input type="radio" name="tsMode" value="custom">
+              <span>Custom timestamp</span>
+            </label>
+          </div>
+
+          <div class="custom-ts-inputs" id="customTsGroup" style="display: none;">
+            <label class="custom-ts-field">
+              <input type="checkbox" id="customStartCheck">
+              <span>Start</span>
+              <input type="datetime-local" id="customStartVal" class="crp-input" disabled>
+            </label>
+            <label class="custom-ts-field">
+              <input type="checkbox" id="customEndCheck">
+              <span>End</span>
+              <input type="datetime-local" id="customEndVal" class="crp-input" disabled>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Images Section -->
+        <div class="images-section">
+          <!-- Large Image Group -->
+          <div class="image-group">
+            <div class="image-group-title">Large Image</div>
+            <div class="crp-row inline-row">
+              <div class="field flex-2">
+                <span class="crp-label">Key</span>
+                <input type="text" id="largeKey" class="crp-input mono" placeholder="Image key or URL" />
+              </div>
+              <div class="field flex-2">
+                <span class="crp-label">Text</span>
+                <input type="text" id="largeText" class="crp-input" placeholder="Tooltip text" />
+              </div>
+            </div>
+            <div class="crp-row">
+              <span class="crp-label">URL</span>
+              <input type="url" id="largeUrl" class="crp-input mono" placeholder="https://..." />
+            </div>
+          </div>
+
+          <!-- Small Image Group -->
+          <div class="image-group">
+            <div class="image-group-title">Small Image</div>
+            <div class="crp-row inline-row">
+              <div class="field flex-2">
+                <span class="crp-label">Key</span>
+                <input type="text" id="smallKey" class="crp-input mono" placeholder="Image key or URL" />
+              </div>
+              <div class="field flex-2">
+                <span class="crp-label">Text</span>
+                <input type="text" id="smallText" class="crp-input" placeholder="Tooltip text" />
+              </div>
+            </div>
+            <div class="crp-row">
+              <span class="crp-label">URL</span>
+              <input type="url" id="smallUrl" class="crp-input mono" placeholder="https://..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons Section -->
+        <div class="buttons-section">
+          <!-- Button 1 -->
+          <div class="btn-group">
+            <div class="btn-group-title">Button 1</div>
+            <div class="crp-row inline-row">
+              <div class="field flex-2">
+                <span class="crp-label">Text</span>
+                <input type="text" id="btn1Label" class="crp-input" placeholder="Button text" />
+              </div>
+              <div class="field flex-3">
+                <span class="crp-label">URL</span>
+                <input type="url" id="btn1Url" class="crp-input mono" placeholder="https://..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- Button 2 -->
+          <div class="btn-group">
+            <div class="btn-group-title">Button 2</div>
+            <div class="crp-row inline-row">
+              <div class="field flex-2">
+                <span class="crp-label">Text</span>
+                <input type="text" id="btn2Label" class="crp-input" placeholder="Button text" />
+              </div>
+              <div class="field flex-3">
+                <span class="crp-label">URL</span>
+                <input type="url" id="btn2Url" class="crp-input mono" placeholder="https://..." />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Entry Block -->
+        <div class="crp-token-block">
+          <span class="crp-label">Discord User Token</span>
+          <div class="token-input-wrapper">
+            <input type="password" id="tokenInput" class="crp-input mono" placeholder="Paste your user token here..." autocomplete="off">
+            <button id="toggleTokenVisibility" class="visibility-toggle" type="button" title="Show/Hide Token">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+          <label class="ts-option" style="margin-top: 6px; user-select: none;">
+            <input type="checkbox" id="keepOnline" checked>
+            <span style="font-weight: 500; font-size: 11.5px; color: var(--text-secondary);">Keep Online 24/7 (Auto-connect on startup)</span>
+          </label>
+          <small class="token-hint">Your token is stored locally in `config.json` and sent only to Discord's official Gateway.</small>
+        </div>
+
+        <!-- Footer Control Buttons -->
+        <div class="crp-action-bar">
+          <div class="action-left">
+            <button id="connectBtn" class="crp-btn btn-connect">Connect</button>
+            <button id="disconnectBtn" class="crp-btn btn-disconnect" disabled>Disconnect</button>
+          </div>
+          <button id="updateBtn" class="crp-btn btn-update" disabled>Update Presence</button>
+        </div>
+
+      </div>
+
+      <!-- Window Status Bar -->
+      <div class="crp-statusbar">
+        <span class="user-status-text" id="userStatusTag">Disconnected</span>
+        <span class="status-connection-badge disconnected" id="connectionBadge">Disconnected</span>
+      </div>
+    </div>
+
+
+    <!-- ── RIGHT SIDE: LIVE PREVIEW & PAYLOAD VIEW ── -->
+    <div class="preview-column">
+      
+      <!-- Live Preview Title -->
+      <div class="column-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span>Live Profile Preview</span>
+      </div>
+
+      <!-- Discord Profile Popout Mockup -->
+      <div class="discord-profile-card">
+        <!-- Banner -->
+        <div class="dp-banner" id="dpBanner"></div>
+
+        <!-- Avatar Wrapper -->
+        <div class="dp-avatar-wrap">
+          <div class="dp-avatar" id="dpAvatar">?</div>
+          <!-- Status icon corresponding to Desktop / Mobile status -->
+          <div class="dp-status-badge offline" id="dpStatusBadge"></div>
+        </div>
+
+        <!-- User Information -->
+        <div class="dp-user-info">
+          <div class="dp-global-name" id="dpGlobalName">Not connected</div>
+          <div class="dp-username" id="dpUsername">Disconnected</div>
+        </div>
+
+        <div class="dp-divider"></div>
+
+        <!-- Rich Presence Section -->
+        <div class="dp-activity-section">
+          <div class="dp-section-header" id="dpActivityTypeHeader">WATCHING AN APP</div>
+          <div class="dp-activity-grid">
+            <div class="dp-images-wrapper">
+              <div class="dp-large-image" id="dpLargeImage">
+                <div class="dp-image-placeholder">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <path d="M21 15l-5-5L5 21"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="dp-small-image" id="dpSmallImage" style="display: none;"></div>
+            </div>
+            <div class="dp-text-wrapper">
+              <div class="dp-act-name" id="dpActName">🦤.</div>
+              <div class="dp-act-details" id="dpActDetails">be mine ?</div>
+              <div class="dp-act-state" id="dpActState">Lighting a fire...</div>
+              <div class="dp-act-timestamp" id="dpActTime">02:14:15 elapsed</div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="dp-buttons" id="dpButtons">
+            <div class="dp-btn-mock">Mathura</div>
+          </div>
+        </div>
+
+        <div class="dp-divider"></div>
+
+        <!-- Custom Status Mockup -->
+        <div class="dp-custom-status-section">
+          <div class="dp-section-header">CUSTOM STATUS</div>
+          <div class="dp-status-text">Using CustomRP Mobile Status 📱</div>
+        </div>
+      </div>
+
+      <!-- JSON Payload Viewer -->
+      <div class="column-title" style="margin-top: 24px;">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span>Gateway Payload</span>
+      </div>
+
+      <div class="payload-box">
+        <pre><code id="payloadJson" class="mono">Initializing payload...</code></pre>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Toast notification banner -->
+  <div id="toastNotification" class="toast-notif">Status updated successfully</div>
+
+  <!-- Client Script -->
+  <script src="app.js"></script>
+</body>
+</html>
